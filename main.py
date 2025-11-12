@@ -34,6 +34,17 @@ def streamlit_app():
     st.title("🌤️ AI-Powered Weather Forecast for Indian Cities")
     st.markdown("Get conversational weather forecasts powered by Gemini AI!")
     
+    # Debug: Check API keys
+    weather_key = os.getenv("OPENWEATHER_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    
+    if not weather_key:
+        st.error("⚠️ OpenWeatherMap API key not found! Please check your .env file.")
+        return
+    if not gemini_key:
+        st.error("⚠️ Gemini API key not found! Please check your .env file.")
+        return
+    
     city = st.text_input("Enter an Indian City Name:", "Mumbai")
     
     if st.button("Get Forecast"):
@@ -41,7 +52,8 @@ def streamlit_app():
             weather_data = get_weather_data(city)
         
         if weather_data:
-            st.subheader(f"Weather for {weather_data['city']}")
+            st.success(f"✅ Weather data retrieved for {weather_data['city']}")
+            st.subheader(f"📊 Weather for {weather_data['city']}")
             
             col1, col2 = st.columns(2)
             with col1:
@@ -58,13 +70,13 @@ def streamlit_app():
                 ai_forecast = generate_ai_forecast(weather_data)
             
             st.subheader("🤖 AI Forecast:")
-            st.success(ai_forecast)
+            st.info(ai_forecast)
         else:
-            st.error("Could not retrieve weather data. Please check the city name.")
+            st.error("Could not retrieve weather data. Please check the city name and try again.")
 
 if __name__ == "__main__":
-    # For Streamlit app
+    # For Streamlit app (uncomment this line)
     streamlit_app()
     
-    # For command-line interface:
+    # For command-line interface (comment out the above and uncomment this):
     # main()
