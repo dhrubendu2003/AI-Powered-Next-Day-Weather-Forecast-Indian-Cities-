@@ -18,7 +18,7 @@ def generate_ai_forecast(weather_info):
     try:
         # 🔧 Configure Gemini API dynamically
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('models/gemini-2.0-flash-001')
         
         # Handle wind_speed: convert 'N/A' to 'not available' or a number
         wind_speed = weather_info['wind_speed']
