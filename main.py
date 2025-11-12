@@ -1,17 +1,17 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 import streamlit as st
 
-# Load environment variables from .env file
-load_dotenv()
+# 🔒 Load .env from the same directory as main.py (works for Streamlit AND CLI)
+dotenv_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=dotenv_path)
 
 from src.weather_api import get_weather_data
 from src.gemini_api import generate_ai_forecast
 
 def main():
-    """
-    Main function for command-line interface
-    """
+    """Main function for command-line interface"""
     print("AI-Powered Weather Forecast for Indian Cities")
     city = input("Enter an Indian city name: ")
     
@@ -28,22 +28,17 @@ def main():
         print("Could not retrieve weather data.")
 
 def streamlit_app():
-    """
-    Streamlit web interface for the weather forecast app
-    """
+    """Streamlit web interface for the weather forecast app"""
     st.title("🌤️ AI-Powered Weather Forecast for Indian Cities")
     st.markdown("Get conversational weather forecasts powered by Gemini AI!")
     
-    # Debug: Check API keys
+    # 🔍 Debug: Show if API keys are loaded (for development only)
     weather_key = os.getenv("OPENWEATHER_API_KEY")
     gemini_key = os.getenv("GEMINI_API_KEY")
     
-    if not weather_key:
-        st.error("⚠️ OpenWeatherMap API key not found! Please check your .env file.")
-        return
-    if not gemini_key:
-        st.error("⚠️ Gemini API key not found! Please check your .env file.")
-        return
+    if not weather_key or not gemini_key:
+        st.error("⚠️ API keys not loaded! Check if .env file exists in the project root.")
+        st.stop()  # Stop execution if keys are missing
     
     city = st.text_input("Enter an Indian City Name:", "Mumbai")
     
@@ -52,7 +47,6 @@ def streamlit_app():
             weather_data = get_weather_data(city)
         
         if weather_data:
-            st.success(f"✅ Weather data retrieved for {weather_data['city']}")
             st.subheader(f"📊 Weather for {weather_data['city']}")
             
             col1, col2 = st.columns(2)
@@ -75,8 +69,8 @@ def streamlit_app():
             st.error("Could not retrieve weather data. Please check the city name and try again.")
 
 if __name__ == "__main__":
-    # For Streamlit app (uncomment this line)
+    # For Streamlit deployment (uncomment the one you want)
     streamlit_app()
     
-    # For command-line interface (comment out the above and uncomment this):
+    # For command-line interface:
     # main()
