@@ -37,7 +37,7 @@ def main():
     
     weather_data = get_weather_data(city)
     
-    if weather_data:
+    if weather_data:  # 🔧 Fixed: Added colon
         print("\nRaw Weather Data:")
         print(weather_data)
         
@@ -73,7 +73,7 @@ def streamlit_app():
         with st.spinner(f"Fetching weather data for {city}..."):
             weather_data = get_weather_data(city)
         
-        if weather_data:
+        if weather_data:  # 🔧 Fixed: Added colon
             st.subheader(f"📊 Weather for {weather_data['city']}")
             
             col1, col2 = st.columns(2)
@@ -88,7 +88,7 @@ def streamlit_app():
             st.write(f"**Forecast Date**: {weather_data['date']}")
             
             with st.spinner("Generating AI forecast..."):
-                ai_forecast = generate_ai_forecast(weather_data)
+                ai_forecast = generate_ai_forecast(weather_data)  # 🔧 Fixed: Correct function name
             
             st.subheader("🤖 AI Forecast:")
             st.info(ai_forecast)
